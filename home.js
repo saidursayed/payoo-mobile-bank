@@ -63,6 +63,7 @@ function handleTitleToggle(id){
     document.getElementById(id).classList.remove("text-[#080808b3]")
     document.getElementById(id).classList.add("text-[#0874f2]")
 }
+
 // add money feature
 document.getElementById("add-money-btn").addEventListener('click', function(e){
     e.preventDefault()
@@ -139,6 +140,140 @@ document.getElementById("withdraw-btn").addEventListener('click', function(e){
 
 })
 
+
+// Transfer Money feature
+document.getElementById("transfer-btn").addEventListener('click', function(e){
+    e.preventDefault()
+
+    const agentNumber = getInputValue("user-account-number")
+    if(agentNumber.length < 11){
+        alert("Please provide valid user account number")
+        return;
+    }
+    
+    const amount = getInputValueNumber("transfer-amount")
+    const withdrawPin = getInputValueNumber("transfer-pin")
+
+    const availableBalance = getInnerText("available-balance")
+    if (amount <= 0 || amount > availableBalance){
+        alert("Invalid Amount")
+        return;
+    }
+
+
+    if(withdrawPin !== validPin){
+        alert("Please provide valid pin number")
+        return;
+    }
+
+    const totalNewAvailableBalance = availableBalance - amount;
+
+    setInnerText(totalNewAvailableBalance)
+
+    const data = {
+        name: "Transfer Money",
+        date: new Date().toLocaleTimeString()
+    }
+
+    transactionData.push(data)
+
+})
+
+// Pay Bill feature
+document.getElementById("pay-bill-btn").addEventListener('click', function(e){
+    e.preventDefault()
+    
+    const billerAccountNumber = getInputValue("biller-account-number")
+    if(billerAccountNumber.length < 11){
+        alert("Please provide Biller account number")
+        return;
+    }
+    
+    const payAmount = getInputValueNumber("pay-amount")
+    const payBillPin = getInputValueNumber("pay-bill-pin")
+
+    const availableBalance = getInnerText("available-balance")
+    if (payAmount <= 0 || payAmount > availableBalance){
+        alert("Invalid Amount")
+        return;
+    }
+
+
+    if(payBillPin !== validPin){
+        alert("Please provide valid pin number")
+        return;
+    }
+
+    const totalNewAvailableBalance = availableBalance - payAmount;
+
+    setInnerText(totalNewAvailableBalance)
+
+    const data = {
+        name: getInputValue("select-pay-bill"),
+        date: new Date().toLocaleTimeString()
+    }
+
+    transactionData.push(data)
+
+
+})
+
+// Get Bonus feature
+const bonusCoupon1000 = "BONUS1000";
+const bonusCoupon500 = "BONUS500";
+const bonusCoupon100 = "BONUS100";
+
+document.getElementById("bonus-btn").addEventListener('click', function(e){
+    e.preventDefault()
+
+    const availableBalance = getInnerText("available-balance")
+
+    const couponNumber = getInputValue("coupon-code");
+    if (couponNumber === bonusCoupon100){
+        const addMoney = availableBalance + 100;
+        setInnerText(addMoney)
+
+        const data = {
+            name: "Added 100 Tk",
+            date: new Date().toLocaleTimeString()
+        }
+
+        transactionData.push(data)
+
+        return;
+    }
+    if(couponNumber === bonusCoupon500){
+        const addMoney = availableBalance + 500;
+        setInnerText(addMoney)
+
+        const data = {
+            name: "Added 500 Tk",
+            date: new Date().toLocaleTimeString()
+        }
+
+        transactionData.push(data)
+
+        return;
+    }
+    if(couponNumber === bonusCoupon1000){
+        const addMoney = availableBalance + 1000;
+        setInnerText(addMoney)
+
+
+        const data = {
+            name: "Added 1000 Tk",
+            date: new Date().toLocaleTimeString()
+        }
+
+        transactionData.push(data)
+
+        return;
+    }
+
+
+
+})
+
 // transactions feature
 document.getElementById("transactions").addEventListener("click", function() {
     const transactionContainer = document.getElementById("transaction-container")
@@ -212,3 +347,10 @@ document.getElementById("transactions").addEventListener('click', function(){
     handleTitleToggle("transactions-title")
 })
 
+
+
+
+
+document.getElementById("logout-btn").addEventListener('click', function(){
+    window.location.href = "./index.html"
+})
